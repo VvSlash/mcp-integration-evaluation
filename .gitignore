@@ -1,3 +1,5 @@
+# macOS
+.DS_Store
 # Logs
 logs
 *.log
@@ -141,3 +143,37 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# --- mcp-integration-evaluation ---
+# kopie robocze fixture'ow mutowanych w scenariuszach (odtwarzane przed iteracja)
+datasets/.work/
+# venv Pythona (install_python_dependencies.ps1)
+.venv/
+# artefakty interpretera Pythona
+__pycache__/
+*.py[cod]
+# gotowce: klony git, artefakty pip i portable Blender (bez wendoringu w repo)
+third_party/*/repo/
+third_party/*/dist/
+third_party/blender/
+third_party/postgres/
+third_party/**/node_modules/
+# frameworki ewaluacyjne: klony git i lokalne instalacje npm
+# (globalne reguly .venv/ i node_modules/ pokrywaja srodowiska zagniezdzone)
+third_party/eval-frameworks/*/repo/
+third_party/eval-frameworks/*/package.json
+third_party/eval-frameworks/*/package-lock.json
+# artefakty setupu gotowcow i frameworkow (generowane, nie wersjonowane)
+third_party/**/version.json
+third_party/**/issues.json
+third_party/**/compatibility.json
+
+# wyniki pomiarow (generowane lokalnie)
+results/raw/*
+!results/raw/.gitkeep
+results/normalized/*
+!results/normalized/.gitkeep
+results/plots/*
+!results/plots/.gitkeep
+results/reports/*
+!results/reports/.gitkeep

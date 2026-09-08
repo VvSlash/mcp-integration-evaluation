@@ -1,0 +1,49 @@
+
+scenes:
+  - id: BLEND-001-reference
+    description: Scena z kostką i kamerą skierowaną na kostkę
+    expected_objects:
+      - type: MESH
+        shape: cube
+        name_contains: cube
+      - type: CAMERA
+    camera:
+      looks_at_object: cube
+      tolerance_deg: 15
+
+  - id: BLEND-002-reference
+    description: Kula z czerwonym materiałem i światłem w scenie
+    expected_objects:
+      - type: MESH
+        shape: sphere
+        material:
+          base_color_hex: "#FF0000"
+          color_tolerance: 0.2
+      - type: LIGHT
+    notes: >
+      Ocena automatyczna + jakościowa. Na własnym serwerze światło
+      pochodzi ze sceny startowej (katalog nie tworzy świateł — luka celowa).
+
+  - id: BLEND-003-reference
+    description: Scena startowa do podsumowania — default trio (Cube, Light, Camera)
+    expected_objects:
+      - { type: MESH, shape: cube }
+      - { type: CAMERA }
+      - { type: LIGHT }
+    notes: >
+      Referencja = scena startowa iteracji własnego serwera (reset "default").
+      Dla gotowca (bez resetu) scena bieżąca zależy od wcześniejszych scenariuszy —
+      kryterium "wymienia wszystkie obiekty BIEŻĄCEJ sceny" ocenia się wtedy
+      względem faktycznego stanu, nie tej referencji.
+
+  - id: XSRV-002-reference
+    description: Trzy kostki utworzone z 3 najdroższych opłaconych zamówień
+    expected_objects:
+      - { type: MESH }
+      - { type: MESH }
+      - { type: MESH }
+    notes: >
+      Scena startowa PUSTA (reset "empty") — jedyne meshe to kostki modelu, więc
+      3× MESH == 3 kostki. Monotoniczność skali względem total_amount weryfikowana
+      poza walidatorem (dimensions z get_scene_summary vs baza; automatyczna analiza
+      rekordów + ocena jakościowa, R8).

@@ -1,0 +1,121 @@
+scenarios:
+  - id: JSON-001
+    name: Read products file
+    category: json
+    variant: third_party_mcp_llm
+    server: json-mcp
+    prompt: "Read the list of products from products.json and report how many
+      products it contains. Return structured JSON with fields: count."
+    expected_tool_family: read
+    expected_capability: read
+    expected_arguments:
+      file: products.json
+    success_criteria:
+      - toolCallSuccess == true
+      - count == productsCount z products.expected.json
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-002
+    name: Find product with id 17
+    category: json
+    variant: third_party_mcp_llm
+    server: json-mcp
+    prompt: Find the product with id 17 in products.json. Return the matching
+      product as structured JSON.
+    expected_tool_family: query
+    expected_capability: query
+    expected_arguments:
+      file: products.json
+    success_criteria:
+      - toolCallSuccess == true; dokładnie 1 rekord z id == 17
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - resultIntegrationScore
+    iterations: 10
+    deterministic: false
+    notes: Serwer bez JSONPath — model czyta plik i filtruje w kontekście.
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-003
+    name: Count electronics with price over 100
+    category: json
+    variant: third_party_mcp_llm
+    server: json-mcp
+    prompt: "Count the products in category electronics with price greater than 100
+      in products.json. Return structured JSON with fields: count."
+    expected_tool_family: filter
+    expected_capability: filter
+    expected_arguments:
+      file: products.json
+    success_criteria:
+      - toolCallSuccess == true
+      - count == electronicsPriceOver100Count z products.expected.json
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    notes: Filtrowanie w kontekście — cały plik (60 produktów) trafia do promptu
+      (koszt tokenowy vs własny json_query).
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-004
+    name: Update price of product 17 in working copy
+    category: json
+    variant: third_party_mcp_llm
+    server: json-mcp
+    prompt: Change the price of product id 17 to 249.99 in products.json (the update
+      goes to a working copy). Confirm the new value. Return structured JSON.
+    expected_tool_family: update
+    expected_capability: update
+    expected_arguments:
+      file: products.json
+    success_criteria:
+      - toolCallSuccess == true; plik roboczy zawiera nową cenę
+      - fixture wzorcowy datasets/json/products.json nietknięty (hook kopii
+        roboczej)
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - unnecessaryToolCalls
+    iterations: 10
+    deterministic: false
+    notes: >
+      edit_file wymaga dokładnego dopasowania linii — model musi najpierw
+      odczytać plik (oczekiwana sekwencja read → edit; hook resetuje plik
+      roboczy przed iteracją).
+    expected_result_shape:
+      type: object
+    minimum_tool_calls: 2

@@ -1,0 +1,26 @@
+[
+  {
+    "scenarioId": "PG-001",
+    "scenarioName": "Search paid orders",
+    "variant": "baseline",
+    "iteration": 1,
+    "latencyMs": 2.821,
+    "success": true,
+    "errorCode": null,
+    "errorMessage": null,
+    "resultCount": 5,
+    "timestamp": "2026-05-04T03:41:00.619Z"
+  },
+  {
+    "scenarioId": "PG-002",
+    "scenarioName": "Search shipped orders",
+    "variant": "baseline",
+    "iteration": 1,
+    "latencyMs": 3.101,
+    "success": false,
+    "errorCode": "BASELINE_POSTGRES_QUERY_FAILED",
+    "errorMessage": "connection refused",
+    "resultCount": null,
+    "timestamp": "2026-05-04T03:41:00.700Z"
+  }
+]

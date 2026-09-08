@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "research-mcp-blender": {
+      "command": "npx",
+      "args": ["tsx", "src/servers/blender/server.ts"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MCP_BLENDER_SERVER_NAME": "research-mcp-blender-server",
+        "MCP_BLENDER_SERVER_VERSION": "0.1.0",
+        "MCP_EVAL_BLENDER_HOST": "127.0.0.1",
+        "MCP_EVAL_BLENDER_PORT": "9877"
+      }
+    }
+  }
+}

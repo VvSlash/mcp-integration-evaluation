@@ -1,0 +1,5 @@
+
+server: duckduckgo-mcp
+mapping:
+  web_search: [web-search]
+  fetch_content: [web-search]

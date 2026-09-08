@@ -1,0 +1,8 @@
+
+server: blender-mcp
+mapping:
+  scene_create: [execute_blender_code]
+  object_create: [execute_blender_code]
+  material: [execute_blender_code, set_texture]
+  render: [get_viewport_screenshot, execute_blender_code]
+  scene_inspect: [get_scene_info, get_object_info]

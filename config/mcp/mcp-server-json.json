@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "research-mcp-json": {
+      "command": "npx",
+      "args": ["tsx", "src/servers/json/server.ts"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MCP_JSON_SERVER_NAME": "research-mcp-json-server",
+        "MCP_JSON_SERVER_VERSION": "0.1.0",
+        "JSON_DATA_DIR": "datasets/json",
+        "JSON_WORK_DIR": "datasets/.work/json"
+      }
+    }
+  }
+}

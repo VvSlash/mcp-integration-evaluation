@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "mcp-json-fixture",
+    "features": {
+      "search": {
+        "enabled": true,
+        "maxResults": 25,
+        "fuzzy": {
+          "enabled": false,
+          "distance": 2
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "ttlSeconds": 300,
+        "layers": {
+          "memory": true,
+          "disk": false
+        }
+      }
+    }
+  },
+  "integrations": {
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "options": {
+        "ssl": false,
+        "poolSize": 4
+      }
+    },
+    "llm": {
+      "provider": "ollama",
+      "model": "qwen3.5",
+      "params": {
+        "temperature": 0,
+        "numCtx": 8192
+      }
+    }
+  },
+  "metadata": {
+    "generatedBy": "scripts/data/generate_json_fixtures.ts",
+    "seed": 20260706
+  }
+}

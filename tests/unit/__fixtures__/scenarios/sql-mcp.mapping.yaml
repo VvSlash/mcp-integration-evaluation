@@ -1,0 +1,4 @@
+server: sql-mcp
+mapping:
+  db_read: query
+  schema_inspect: describe_table

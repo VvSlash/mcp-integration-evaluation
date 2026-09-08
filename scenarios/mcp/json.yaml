@@ -1,0 +1,68 @@
+
+scenarios:
+  - id: JSON-001
+    name: Read products file
+    category: json
+    variant: mcp
+    server: json
+    expected_tools: [json_read_file]
+    expected_tool_family: read
+    expected_arguments: { file: products.json }
+    expected_result_shape: { type: list }
+    success_criteria:
+      - toolCallSuccess == true
+      - count == productsCount z products.expected.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: JSON-002
+    name: Find product with id 17
+    category: json
+    variant: mcp
+    server: json
+    expected_tools: [json_query]
+    expected_tool_family: query
+    expected_arguments: { file: products.json, path: '$[?(@.id==17)]' }
+    expected_result_shape: { type: list, minCount: 1, maxCount: 1 }
+    success_criteria:
+      - toolCallSuccess == true
+      - dokładnie 1 dopasowanie, rekord zgodny z productId17 z products.expected.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: JSON-003
+    name: Count electronics with price over 100
+    category: json
+    variant: mcp
+    server: json
+    expected_tools: [json_query]
+    expected_tool_family: filter
+    expected_arguments: { file: products.json, path: '$[?(@.category=="electronics" && @.price>100)]' }
+    expected_result_shape: { type: list }
+    success_criteria:
+      - toolCallSuccess == true
+      - liczba dopasowań == electronicsPriceOver100Count z products.expected.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: JSON-004
+    name: Update price of product 17 in working copy
+    category: json
+    variant: mcp
+    server: json
+    expected_tools: [json_update_value]
+    expected_tool_family: update
+    expected_arguments: { file: products.json, path: '$[?(@.id==17)].price', value: 249.99 }
+    expected_result_shape: { type: object }
+    success_criteria:
+      - toolCallSuccess == true
+      - kopia robocza w datasets/.work/json/ zawiera nową cenę; fixture wzorcowy nietknięty
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: >
+      Scenariusz mutujący — runner odtwarza kopię roboczą przed KAŻDĄ iteracją
+      (usuwa plik roboczy; narzędzie tworzy go na nowo z wzorca).

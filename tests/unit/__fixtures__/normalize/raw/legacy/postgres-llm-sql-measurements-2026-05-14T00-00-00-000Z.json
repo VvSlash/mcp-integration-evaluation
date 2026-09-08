@@ -1,0 +1,25 @@
+[
+  {
+    "scenarioId": "PG-001",
+    "scenarioName": "Search paid orders",
+    "variant": "mcp-llm-sql",
+    "iteration": 1,
+    "latencyMs": 29003.126,
+    "success": true,
+    "errorCategory": "OK",
+    "errorCode": null,
+    "errorMessage": null,
+    "toolCallRequested": true,
+    "toolCallSuccess": true,
+    "finalAnswerValidJson": true,
+    "toolResultCount": 5,
+    "usedTool": "execute_read_query",
+    "sql": "SELECT id FROM orders WHERE status = 'paid' LIMIT 5",
+    "postgresErrorCode": null,
+    "postgresErrorMessage": null,
+    "totalPromptTokens": 1380,
+    "totalOutputTokens": 436,
+    "totalTokens": 1816,
+    "timestamp": "2026-05-13T21:46:47.494Z"
+  }
+]

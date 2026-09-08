@@ -1,0 +1,2 @@
+{"task_id": "SQL-001", "mode": "full", "model": "ollama/qwen3.5", "latency_ms": 15000.5, "prompt_tokens": 2100, "completion_tokens": 150, "accuracy": 1.0, "tool_calls": 1, "turns": 2}
+{"task_id": "SQL-001", "mode": "toggle", "model": "ollama/qwen3.5", "latency_ms": 9000.1, "prompt_tokens": 700, "completion_tokens": 140, "accuracy": 0.0, "tool_calls": 2, "turns": 3, "toggle_abuse": true}

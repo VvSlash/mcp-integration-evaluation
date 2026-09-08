@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "third-party-duckduckgo-mcp": {
+      "command": "npx",
+      "args": ["-y", "@oevortex/ddg_search@1.4.0"],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

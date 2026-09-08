@@ -1,0 +1,85 @@
+{
+  "name": "mcp-integration-evaluation",
+  "version": "1.0.0",
+  "description": "Prototype MCP server and evaluation pipeline for comparing LLM integration through Model Context Protocol with direct baseline access to external data sources.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "setup:test-db": "npm run build && node dist/evaluation/bootstrapPostgres.js",
+    "test:bootstrap": "npm run build && node dist/evaluation/verifyBootstrap.js",
+    "stop:test-db": "node dist/evaluation/bootstrapPostgres.js --stop",
+    "campaign": "npm run build && node dist/runners/runCampaign.js",
+    "campaign:suite": "npm run build && node dist/runners/runSuite.js",
+    "inspect:contract": "npm run build && node --env-file=.env.test.local dist/evaluation/contractManifest.js",
+    "verify:catalog": "npm run inspect:contract --",
+    "dev": "tsx src/servers/sql-controlled/server.ts",
+    "dev:sql": "tsx src/servers/sql-minimal/server.ts",
+    "server:sql-controlled": "tsx src/servers/sql-controlled/server.ts",
+    "server:sql-minimal": "tsx src/servers/sql-minimal/server.ts",
+    "server:sql-generic": "tsx src/servers/sql-generic/server.ts",
+    "server:json": "tsx src/servers/json/server.ts",
+    "server:rest": "tsx src/servers/rest-api/server.ts",
+    "server:blender": "tsx src/servers/blender/server.ts",
+    "check:ollama": "tsx src/clients/ollama/checkOllama.ts",
+    "baseline:postgres:once": "tsx src/runners/baseline/directPostgres.ts",
+    "baseline:postgres": "tsx src/runners/baseline/runPostgresBaseline.ts",
+    "baseline:rest": "npm run build && tsx src/runners/baseline/runRestBaseline.ts",
+    "rest-api": "tsx src/rest-api/server.ts",
+    "mcp:postgres": "npm run build && tsx src/runners/mcp/runPostgresMcp.ts",
+    "mcp:postgres:sql": "npm run build && tsx src/runners/mcp/runPostgresMcpSql.ts",
+    "mcp:json": "npm run build && tsx src/runners/mcp/runJsonMcp.ts",
+    "mcp:rest": "npm run build && tsx src/runners/mcp/runRestMcp.ts",
+    "mcp:all": "npm run build && tsx src/runners/mcp/runMcpGeneric.ts",
+    "llm:all": "npm run build && tsx src/runners/mcp-llm/runMcpLlmGeneric.ts",
+    "llm:postgres:mcp": "npm run build && tsx src/runners/mcp-llm/runPostgresMcpWithOllama.ts",
+    "llm:postgres:mcp-sql": "npm run build && tsx src/runners/mcp-llm/runPostgresMcpSqlWithOllama.ts",
+    "data:json": "tsx scripts/data/generate_json_fixtures.ts",
+    "data:rest-seed": "tsx scripts/data/generate_rest_seed.ts",
+    "validate:blender-scene": "tsx scripts/data/validate_blender_scene.ts",
+    "normalize": "tsx src/evaluation/normalize.ts",
+    "inspect:mcp": "tsx src/clients/inspectMcpServer.ts",
+    "test": "vitest run --passWithNoTests",
+    "verify:campaign": "tsx src/evaluation/verifyCampaign.ts",
+    "test:all": "npm run build && npm test && npm run test:integration",
+    "test:integration": "npm run build && node --env-file=.env.test.local --env-file=config/test-integration.env node_modules/vitest/vitest.mjs run tests/integration/campaignReliability.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VvSlash/mcp-integration-evaluation.git"
+  },
+  "keywords": [
+    "mcp",
+    "llm",
+    "ollama",
+    "evaluation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/VvSlash/mcp-integration-evaluation/issues"
+  },
+  "homepage": "https://github.com/VvSlash/mcp-integration-evaluation#readme",
+  "dependencies": {
+    "@cfworker/json-schema": "^4.1.1",
+    "@modelcontextprotocol/client": "^2.0.0-alpha.2",
+    "@modelcontextprotocol/server": "^2.0.0-alpha.2",
+    "dotenv": "^17.4.2",
+    "express": "5.1.0",
+    "jsonpath-plus": "10.3.0",
+    "pg": "^8.16.0",
+    "yaml": "2.8.1",
+    "zod": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.3",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.15.5",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  }
+}

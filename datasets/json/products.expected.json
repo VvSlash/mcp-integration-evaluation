@@ -1,0 +1,13 @@
+{
+  "productsCount": 60,
+  "ordersCount": 40,
+  "productId17": {
+    "id": 17,
+    "name": "Max Notebook 17",
+    "category": "sports",
+    "price": 256.75,
+    "stock": 126
+  },
+  "electronicsPriceOver100Count": 10,
+  "seed": 20260706
+}

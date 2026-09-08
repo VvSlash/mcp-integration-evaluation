@@ -1,0 +1,7 @@
+
+server: excel-mcp
+mapping:
+  sheet_list: [get_workbook_metadata]
+  read_range: [read_data_from_excel]
+  search: [read_data_from_excel]
+  write: [write_data_to_excel, create_worksheet]

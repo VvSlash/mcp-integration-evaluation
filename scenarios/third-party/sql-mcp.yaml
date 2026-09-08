@@ -1,0 +1,125 @@
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: third_party_mcp_llm
+    server: sql-mcp
+    prompt: Find up to 5 paid orders and summarize how many were returned.
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    expected_result_shape:
+      type: list
+      minCount: 1
+      maxCount: 5
+    success_criteria:
+      - toolCallSuccess == true; wszystkie rekordy status == "paid"
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: third_party_mcp_llm
+    server: sql-mcp
+    prompt: Find shipped orders. Return only structured JSON.
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    success_criteria:
+      - toolCallSuccess == true; wszystkie rekordy status == "shipped"
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - status
+        - total_amount
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: third_party_mcp_llm
+    server: sql-mcp
+    prompt: Find orders with total amount between 300 and 1000 PLN. Return the
+      number of matching records and the most relevant fields.
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    success_criteria:
+      - toolCallSuccess == true; total_amount w zakresie 300–1000
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - status
+        - total_amount
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: third_party_mcp_llm
+    server: sql-mcp
+    prompt: Find recent orders without filtering by status. Limit the result to 10
+      records.
+    expected_tool_family: db_read
+    expected_capability: sorted_select
+    success_criteria:
+      - toolCallSuccess == true; rekordy malejąco po created_at
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - status
+        - total_amount
+  - id: SQL-005
+    name: Total value of paid orders per currency (schema-driven)
+    category: sql
+    variant: third_party_mcp_llm
+    server: sql-mcp
+    prompt: Based on the database schema, compute the total value of paid orders per
+      currency. Return the result as structured JSON.
+    expected_tool_family: db_read
+    expected_capability: aggregation
+    success_criteria:
+      - LLM generuje SQL z GROUP BY currency (schemat może odczytać rodziną
+        schema_inspect)
+      - wynik zgodny z wartością referencyjną z bazy
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    notes: Wspólny z wariantem sql-minimal — porównanie zdolności aggregation.
+    expected_result_shape:
+      type: list
+      minCount: 1

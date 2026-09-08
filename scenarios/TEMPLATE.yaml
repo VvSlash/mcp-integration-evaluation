@@ -1,0 +1,31 @@
+
+id: SQL-001
+name: Find paid orders
+category: sql
+variant: mcp_llm
+server: sql-controlled
+prompt: >
+  Znajdź 5 opłaconych zamówień. Zwróć odpowiedź jako JSON
+  z polami: orders (lista), count (liczba).
+expected_tools:
+  - pg_search_orders
+expected_tool_family: db_read
+expected_capability: filtered_select
+expected_arguments:
+  status: paid
+  limit: 5
+expected_result_shape:
+  type: list
+  minCount: 1
+  maxCount: 5
+  fields: [id, status, total_amount]
+success_criteria:
+  - toolCallSuccess == true
+  - wszystkie zwrócone rekordy mają status == "paid"
+  - finalAnswerValidJson == true
+metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, argumentCorrectness]
+iterations: 30
+deterministic: false
+external: {}
+notes: >
+  Scenariusz bazowy zgodny z istniejącym PG-001 (mapowanie PG-00x → SQL-00x).

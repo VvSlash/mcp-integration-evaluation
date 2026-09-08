@@ -1,0 +1,7 @@
+scenarios:
+  - id: FIX-DUP-001
+    name: Duplicate A
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    deterministic: true

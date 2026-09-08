@@ -1,0 +1,170 @@
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: Find up to 5 paid orders and summarize how many were returned.
+    expected_tools:
+      - pg_search_orders
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    expected_arguments:
+      status: paid
+      limit: 5
+    expected_result_shape:
+      type: list
+      minCount: 1
+      maxCount: 5
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "paid"
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    external:
+      mcp-gating-eval:
+        note: zadanie eksportowalne do tests.json (tryby full/toggle/act)
+    notes: Migracja PG-001, prompt 1:1 z runnera.
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: Find shipped orders. Return only structured JSON.
+    expected_tools:
+      - pg_search_orders
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    expected_arguments:
+      status: shipped
+    expected_result_shape:
+      type: list
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "shipped"
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    notes: Migracja PG-002, prompt 1:1 z runnera.
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: Find orders with total amount between 300 and 1000 PLN. Return the
+      number of matching records and the most relevant fields.
+    expected_tools:
+      - pg_search_orders
+    expected_tool_family: db_read
+    expected_capability: filtered_select
+    expected_arguments:
+      minAmount: 300
+      maxAmount: 1000
+    expected_result_shape:
+      type: list
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie total_amount w zakresie 300–1000
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    notes: Migracja PG-003, prompt 1:1 z runnera.
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: Find recent orders without filtering by status. Limit the result to 10
+      records.
+    expected_tools:
+      - pg_search_orders
+    expected_tool_family: db_read
+    expected_capability: sorted_select
+    expected_arguments:
+      limit: 10
+    expected_result_shape:
+      type: list
+      maxCount: 10
+      fields:
+        - id
+        - status
+        - total_amount
+        - created_at
+    success_criteria:
+      - toolCallSuccess == true
+      - rekordy posortowane malejąco po created_at
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    notes: Migracja PG-004, prompt 1:1 z runnera.
+  - id: SQL-007
+    name: Order statistics grouped by status
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: "Compute order statistics grouped by status: order count, total amount
+      and average amount per group. Return the result as structured JSON."
+    expected_tools:
+      - pg_get_order_statistics
+    expected_tool_family: db_read
+    expected_capability: aggregation
+    expected_arguments:
+      groupBy: status
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - group_value
+        - order_count
+        - total_amount_sum
+        - total_amount_avg
+    success_criteria:
+      - toolCallSuccess == true
+      - agregaty zgodne z wartościami referencyjnymi z bazy
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    notes: Nowy scenariusz — nowy identyfikator, nie pochodzi z migracji PG-00x.

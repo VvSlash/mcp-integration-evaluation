@@ -1,0 +1,51 @@
+
+scenarios:
+  - id: WEB-001
+    name: Current fact after model cutoff (latest Blender release)
+    category: websearch
+    variant: third_party_mcp_llm
+    server: duckduckgo-mcp
+    prompt: "What is the latest stable release version of Blender (the 3D software) right now? Use web search to verify. Return structured JSON with fields: version."
+    expected_tool_family: web_search
+    expected_capability: fresh_fact
+    success_criteria:
+      - toolCallRequested == true (fakt po cutoff — model MUSI szukać)
+      - odpowiedź zgodna z datowanym wzorcem WEB-001 z queries.yaml (judge human)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: Wzorzec ustalony 2026-07-12 (Blender 5.1; 5.2 LTS planowany na lipiec — dryf R5).
+
+  - id: WEB-002
+    name: Known reference answer (Mount Everest height)
+    category: websearch
+    variant: third_party_mcp_llm
+    server: duckduckgo-mcp
+    prompt: "What is the officially recognised height of Mount Everest in meters? Use web search to verify. Return structured JSON with fields: heightMeters."
+    expected_tool_family: web_search
+    expected_capability: verified_fact
+    success_criteria:
+      - toolCallSuccess == true
+      - wartość 8848–8849 m (wzorzec datowany WEB-002; judge human)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+
+  - id: WEB-003
+    name: Memory-known fact — does the model still search and cite results?
+    category: websearch
+    variant: third_party_mcp_llm
+    server: duckduckgo-mcp
+    prompt: "What is the capital of Australia? Use web search to confirm and base your answer on the search results. Return structured JSON with fields: capital."
+    expected_tool_family: web_search
+    expected_capability: result_integration
+    success_criteria:
+      - toolCallRequested == true (mimo znajomości odpowiedzi z pamięci)
+      - odpowiedź "Canberra" oparta na wynikach (resultIntegrationScore > 0; judge llm — oznaczone)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: Bada resultIntegrationScore — użycie danych z narzędzia zamiast pamięci.

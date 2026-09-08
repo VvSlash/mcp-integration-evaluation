@@ -1,0 +1,21 @@
+[
+  {
+    "prompt": "Find up to 5 paid orders and summarize how many were returned.",
+    "scenarioId": "PG-001",
+    "scenarioName": "Search paid orders",
+    "llmOnly": {
+      "prompt": "Find up to 5 paid orders and summarize how many were returned.",
+      "variant": "llm-only",
+      "success": true,
+      "finalAnswerValidJson": true,
+      "errorCode": null,
+      "errorMessage": null,
+      "latencyMs": 22772.576,
+      "tokenUsage": {
+        "promptEvalCount": 308,
+        "evalCount": 194,
+        "totalTokens": 502
+      }
+    }
+  }
+]

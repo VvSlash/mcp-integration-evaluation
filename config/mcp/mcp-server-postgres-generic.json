@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "sql-generic": { "command": "npx", "args": ["tsx", "src/servers/sql-generic/server.ts"] }
+  }
+}

@@ -1,0 +1,6 @@
+scenarios:
+  - id: FIX-BAD-001
+    name: Invalid variant
+    category: sql
+    variant: nie_ma_takiego_wariantu
+    deterministic: true

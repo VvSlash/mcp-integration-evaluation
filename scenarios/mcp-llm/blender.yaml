@@ -1,0 +1,54 @@
+
+scenarios:
+  - id: BLEND-001
+    name: Cube and camera pointed at it
+    category: blender
+    variant: mcp_llm
+    server: blender
+    prompt: "In Blender, clear the default scene, then create a cube and a camera pointed at the cube. Verify by inspecting the scene and return structured JSON listing the created objects."
+    expected_tools: [blender_create_cube, blender_set_camera, blender_get_scene_summary]
+    expected_capability: scene_create
+    success_criteria:
+      - scena zawiera kostkę i kamerę patrzącą na kostkę (walidacja BLEND-001-reference — npm run validate:blender-scene)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, numberOfToolCalls, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: >
+      Minimalny plan: create_cube + set_camera + get_scene_summary (weryfikacja z promptu).
+      "Clear the default scene" jest niewykonywalne własnym katalogiem (brak delete — luka
+      celowa); scena startowa = default trio z resetu.
+
+  - id: BLEND-002
+    name: Red sphere with a light
+    category: blender
+    variant: mcp_llm
+    server: blender
+    prompt: "In Blender, clear the default scene, then create a sphere with a red material and add a light to the scene. Verify by inspecting the scene and return structured JSON listing the objects and the sphere's material color."
+    expected_tools: [blender_create_sphere, blender_set_material, blender_get_scene_summary]
+    expected_capability: object_with_material
+    success_criteria:
+      - kula z materiałem ~czerwonym + światło w scenie (BLEND-002-reference; automatyczna + jakościowa)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, numberOfToolCalls, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: >
+      Własny katalog nie tworzy świateł — "add a light" spełnia światło ze sceny startowej
+      (default trio); kryterium ocenia scenę PO iteracji, nie akcję modelu.
+
+  - id: BLEND-003
+    name: Scene summary
+    category: blender
+    variant: mcp_llm
+    server: blender
+    prompt: "Inspect the current Blender scene and return structured JSON summarising all objects (name and type for each)."
+    expected_tools: [blender_get_scene_summary]
+    expected_capability: scene_inspect
+    success_criteria:
+      - podsumowanie wymienia wszystkie obiekty sceny startowej (BLEND-003-reference = default trio)
+      - finalAnswerValidJson == true; resultIntegrationScore > 0
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: Najprostszy scenariusz serii — smoke test mostu (bez mutacji sceny).

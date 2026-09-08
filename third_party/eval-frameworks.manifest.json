@@ -1,0 +1,99 @@
+{
+  "_comment": "Manifest zewnetrznych frameworkow ewaluacji serwerow MCP. Konsumowany przez scripts/setup/windows/install_eval_frameworks.ps1. Wszystkie frameworki sa OPCJONALNE - stanowia alternatywna metode pomiaru wzgledem wlasnego pipeline'u (src/runners/ + src/evaluation/). pinnedVersion: 'latest' = rozwiaz i przypnij przy pierwszym pobraniu (wynik w version.json).",
+  "frameworks": [
+    {
+      "name": "deepeval",
+      "kind": "pip-venv",
+      "source": "deepeval",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.9",
+      "apiKeys": { "required": false, "candidates": ["OPENAI_API_KEY"], "localModelSupport": "tak - custom provider; Ollama przez CLI 'deepeval set-ollama <model>' (zweryfikowac po instalacji)" },
+      "systemDeps": [],
+      "monitoring": "platforma Confident AI (chmura, opcjonalny login) - bez Prometheus/Grafana",
+      "outputFormats": ["wyniki lokalne + raporty na platformie Confident AI"],
+      "metricsMapping": "ToolCorrectness -> toolSelectionAccuracy; ArgumentCorrectness -> argumentCorrectness; TaskCompletion / MCP Task Completion -> finalAnswerCorrectness; MCP Use -> toolCallSuccess/numberOfToolCalls",
+      "notes": "Metryki agentowe z LLM-as-a-judge; natywne metryki MCP (MCP Task Completion, MCP Use, Multi-Turn MCP Use). Judge domyslnie OpenAI - dla zgodnosci z zakresem projektu preferowac judge na Ollamie."
+    },
+    {
+      "name": "mcpevals-lastmile",
+      "kind": "pip-venv",
+      "source": "mcpevals",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.10",
+      "apiKeys": { "required": true, "candidates": ["ANTHROPIC_API_KEY", "OPENAI_API_KEY"], "localModelSupport": "brak udokumentowanego wsparcia Ollamy - uzycie wymaga platnego API (jawnie oznaczyc w wynikach)" },
+      "systemDeps": [],
+      "monitoring": "OpenTelemetry jako jedyne zrodlo prawdy o metrykach (eksport traces; brak natywnego Prometheus/Grafana - mozliwy przez OTel collector)",
+      "outputFormats": ["JSON", "HTML", "Markdown (flagi --json/--html/--markdown)"],
+      "metricsMapping": "response time/latency -> latencyMs; token usage -> tokenUsage; tool call counts/success/errors -> numberOfToolCalls/toolCallSuccess/errorCode; path efficiency -> unnecessaryToolCalls; LLM judges -> finalAnswerCorrectness",
+      "notes": "Repo: lastmile-ai/mcp-eval, pakiet PyPI 'mcpevals'. Raport JSON importowalny do normalizatora przez format *.external.json."
+    },
+    {
+      "name": "mcp-evals-node",
+      "kind": "npm-local",
+      "source": "mcp-evals",
+      "pinnedVersion": "latest",
+      "nodeMin": 20,
+      "apiKeys": { "required": true, "candidates": ["OPENAI_API_KEY", "ANTHROPIC_API_KEY"], "localModelSupport": "niepotwierdzone - Vercel AI SDK dopuszcza endpointy zgodne z OpenAI (Ollama: http://localhost:11434/v1); zweryfikowac po instalacji" },
+      "systemDeps": ["docker (tylko dla stacku monitoringu)"],
+      "monitoring": "REKOMENDOWANE przez README gotowca: Docker Compose z Prometheus (:9090) + Grafana (:3000) + Jaeger (:16686) + OTel; nasz odpowiednik: config/monitoring/ + przelacznik -WithMonitoring",
+      "outputFormats": ["JSON: oceny 1-5 w 5 wymiarach (accuracy, completeness, relevance, clarity, reasoning) + komentarz"],
+      "metricsMapping": "accuracy -> finalAnswerCorrectness (przeskalowane 1-5 -> 0-1); tool calls/errors/latency (OTel) -> numberOfToolCalls/errorCode/latencyMs; pozostale wymiary -> externalScores",
+      "notes": "Pakiet npm 'mcp-evals' (mclenhard) + GitHub Action. Funkcje metryk oznaczone jako alpha - przypiac wersje i odnotowac w version.json."
+    },
+    {
+      "name": "mcpbench",
+      "kind": "git-pip",
+      "source": "https://github.com/modelscope/MCPBench",
+      "installMode": "requirements",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.11",
+      "apiKeys": { "required": true, "candidates": ["OPENAI_API_KEY"], "localModelSupport": "konfigurowalne endpointy LLM; endpoint zgodny z OpenAI (Ollama /v1) do zweryfikowania; czesc zadan wymaga dodatkowych kluczy (np. Firecrawl)" },
+      "systemDeps": ["node", "jq"],
+      "monitoring": "brak rekomendacji monitoringu w README",
+      "outputFormats": ["raporty ewaluacyjne (accuracy / latency / token consumption)"],
+      "metricsMapping": "task completion accuracy -> finalAnswerCorrectness; latency -> latencyMs; token consumption -> tokenUsage; kategorie web search / database -> category (websearch / sql)",
+      "notes": "Benchmark web search + database + GAIA (arXiv 2504.11094). Instalacja: clone + pip install -r requirements.txt w dedykowanym venv."
+    },
+    {
+      "name": "mcp-gating-eval",
+      "kind": "git-pip",
+      "source": "https://github.com/pavansgill/mcp-gating-eval",
+      "installMode": "editable",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.11",
+      "apiKeys": { "required": false, "candidates": ["OPENROUTER_API_KEY"], "localModelSupport": "TAK - wspiera Ollame i vLLM przez konfigurowalne base_url (framework w pelni zgodny z zakresem projektu bez platnych API)" },
+      "systemDeps": [],
+      "monitoring": "brak rekomendacji monitoringu w README",
+      "outputFormats": ["results.jsonl (per-run: tokeny, accuracy, tool calls, latencja)", "summary.md (tabele porownawcze)", "summary.csv", "transkrypty (--debug)"],
+      "metricsMapping": "token consumption przy trybach full/toggle/act -> tokenPromptCount przy 1 vs N narzedziach; tool-selection accuracy -> toolSelectionAccuracy; latency -> latencyMs; results.jsonl importowany bezposrednio przez normalizator",
+      "notes": "Bada gating narzedzi: full catalog vs gated exposure. Tryby: full / toggle / act. Uruchamiany przeciwko wlasnym serwerom MCP (src/servers/)."
+    },
+    {
+      "name": "mcpmark",
+      "kind": "git-pip",
+      "source": "https://github.com/eval-sys/mcpmark",
+      "installMode": "editable",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.10",
+      "apiKeys": { "required": true, "candidates": ["OPENAI_API_KEY", "ANTHROPIC_API_KEY"], "localModelSupport": "prawdopodobnie TAK - modele przez LiteLLM (prefiks ollama/<model>); README pokazuje tylko API chmurowe - zweryfikowac po instalacji" },
+      "systemDeps": [],
+      "monitoring": "brak rekomendacji Prometheus/Grafana; dostepny wariant Docker (build-docker.sh) do izolacji przebiegow",
+      "outputFormats": ["JSON + CSV per zadanie w ./results/{exp}/{model}__{mcp}/run-*/", "agregacja wielu przebiegow (aggregate_results)"],
+      "metricsMapping": "pass@1/pass@k -> successRate (stabilnosc miedzy przebiegami: pass^k/avg@k -> powtarzalnosc); token usage -> tokenUsage; conversation turns -> numberOfToolCalls/externalScores.turns; weryfikacja per zadanie (verify.py) -> finalAnswerCorrectness",
+      "notes": "Benchmark stress-testowy MCP (127 zadan: Notion/GitHub/Filesystem/Postgres/Playwright). Najistotniejsze suity to Postgres i Filesystem (zbiezne z kategoriami sql/json). Zadania browser wymagaja recznego kroku 'playwright install' (odnotowac w usability manualStepsCount). Minimalna wersja Pythona nieudokumentowana - zweryfikowac pyproject.toml przy instalacji. Klucze per usluga (Notion/GitHub) potrzebne tylko dla tych suit."
+    },
+    {
+      "name": "mcp-interviewer",
+      "kind": "pip-venv",
+      "source": "mcp-interviewer",
+      "pinnedVersion": "latest",
+      "pythonMin": "3.10",
+      "apiKeys": { "required": false, "candidates": ["OPENAI_API_KEY"], "localModelSupport": "TAK - klient zgodny z chat completions API OpenAI, konfigurowalne base_url (Ollama http://localhost:11434/v1); lint schematow narzedzi dziala CALKOWICIE bez LLM (flagi --test/--judge sa opcjonalne)" },
+      "systemDeps": [],
+      "monitoring": "brak rekomendacji monitoringu (narzedzie CLI typu lint, nie system ciaglego monitoringu)",
+      "outputFormats": ["mcp-interview.md (raport)", "mcp-interview.json (surowe metryki)"],
+      "metricsMapping": "statystyki wywolan narzedzi -> toolCallSuccess/latencyMs; testy funkcjonalne pass/fail -> successRate; naruszenia ograniczen schematow (limity OpenAI: <=128 narzedzi, <=64 znaki nazwy) i liczba/rozmiar narzedzi -> rozmiar katalogu narzedzi w tokenach oraz zrozumialosc listy narzedzi; ocena LLM (--judge) -> documentationClarityScore (alternatywa)",
+      "notes": "Repo: microsoft/mcp-interviewer, pakiet PyPI 'mcp-interviewer'. Jedyny framework oceniajacy JAKOSC SAMEGO SERWERA (schematy, zgodnosc, lint) zamiast zachowania LLM - smoke test obok MCP Inspectora, dla wszystkich serwerow wlasnych i gotowcow. Raport mcp-interview.json importowac przez *.external.json."
+    }
+  ]
+}

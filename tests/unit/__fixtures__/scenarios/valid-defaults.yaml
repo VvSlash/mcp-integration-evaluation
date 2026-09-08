@@ -1,0 +1,17 @@
+scenarios:
+  - id: FIX-001
+    name: Deterministic without iterations
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    deterministic: true
+    metrics: [latencyMs, passAtK]
+
+  - id: FIX-002
+    name: LLM without iterations
+    category: sql
+    variant: mcp_llm
+    server: sql-controlled
+    prompt: "Fixture prompt."
+    deterministic: false
+    metrics: [latencyMs, totallyUnknownMetric]

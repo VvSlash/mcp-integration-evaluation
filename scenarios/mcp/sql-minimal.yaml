@@ -1,0 +1,131 @@
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: mcp
+    server: sql-minimal
+    expected_tools:
+      - execute_read_query
+    expected_arguments:
+      sql: SELECT id, customer_name, customer_email, status, total_amount, currency,
+        created_at FROM orders WHERE status = 'paid' ORDER BY created_at DESC
+        LIMIT 5
+    expected_result_shape:
+      type: list
+      maxCount: 5
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "paid"
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-001; SQL semantycznie równoważny zapytaniu adaptera.
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: mcp
+    server: sql-minimal
+    expected_tools:
+      - execute_read_query
+    expected_arguments:
+      sql: SELECT id, customer_name, customer_email, status, total_amount, currency,
+        created_at FROM orders WHERE status = 'shipped' ORDER BY created_at DESC
+        LIMIT 5
+    expected_result_shape:
+      type: list
+      maxCount: 5
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "shipped"
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-002.
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: mcp
+    server: sql-minimal
+    expected_tools:
+      - execute_read_query
+    expected_arguments:
+      sql: SELECT id, customer_name, customer_email, status, total_amount, currency,
+        created_at FROM orders WHERE total_amount >= 300 AND total_amount <=
+        1000 ORDER BY created_at DESC LIMIT 10
+    expected_result_shape:
+      type: list
+      maxCount: 10
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie total_amount w zakresie 300–1000
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-003.
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: mcp
+    server: sql-minimal
+    expected_tools:
+      - execute_read_query
+    expected_arguments:
+      sql: SELECT id, customer_name, customer_email, status, total_amount, currency,
+        created_at FROM orders ORDER BY created_at DESC LIMIT 10
+    expected_result_shape:
+      type: list
+      maxCount: 10
+    success_criteria:
+      - toolCallSuccess == true
+      - 10 rekordów posortowanych malejąco po created_at
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-004.
+  - id: SQL-007
+    name: Order statistics grouped by status
+    category: sql
+    variant: mcp
+    server: sql-minimal
+    expected_tools:
+      - execute_read_query
+    expected_capability: aggregation
+    expected_arguments:
+      sql: SELECT status AS group_value, COUNT(*)::int AS order_count,
+        SUM(total_amount) AS total_amount_sum, ROUND(AVG(total_amount), 2) AS
+        total_amount_avg FROM orders GROUP BY status ORDER BY status
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - group_value
+        - order_count
+        - total_amount_sum
+        - total_amount_avg
+    success_criteria:
+      - toolCallSuccess == true
+      - agregaty count/sum/avg zgodne z wartościami wyliczonymi bezpośrednio z
+        bazy
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+      - resultShapeCorrectness
+    iterations: 30
+    deterministic: true
+    notes: >
+      Nowy scenariusz (narzędzie pg_get_order_statistics) — nie pochodzi
+      z migracji PG-00x, dlatego dostał nowy identyfikator.
+    minimum_tool_calls: 1

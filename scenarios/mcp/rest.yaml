@@ -1,0 +1,63 @@
+
+scenarios:
+  - id: REST-001
+    name: Health check
+    category: rest
+    variant: mcp
+    server: rest-api
+    expected_tools: [rest_health_check]
+    expected_capability: health
+    expected_arguments: {}
+    success_criteria:
+      - toolCallSuccess == true; body.status == "ok"
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-002
+    name: List products
+    category: rest
+    variant: mcp
+    server: rest-api
+    expected_tools: [rest_get_products]
+    expected_capability: list
+    expected_arguments: {}
+    expected_result_shape: { type: list }
+    success_criteria:
+      - toolCallSuccess == true
+      - total == expected.productsCount z seed.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-003
+    name: Get product 3
+    category: rest
+    variant: mcp
+    server: rest-api
+    expected_tools: [rest_get_product]
+    expected_capability: get_by_id
+    expected_arguments: { id: 3 }
+    expected_result_shape: { type: object, fields: [id, name, category, price, stock] }
+    success_criteria:
+      - toolCallSuccess == true; pola zgodne z expected.productId3 z seed.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-004
+    name: Create test order
+    category: rest
+    variant: mcp
+    server: rest-api
+    expected_tools: [rest_create_order]
+    expected_capability: create
+    expected_arguments: { productId: 3, quantity: 2, customerName: Jan Testowy }
+    expected_result_shape: { type: object, fields: [id, productId, quantity, customerName, status] }
+    success_criteria:
+      - toolCallSuccess == true (HTTP 201)
+      - zamówienie widoczne w GET /orders; /metrics zgadza się z liczbą wywołań
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Mutuje stan API w pamięci — runner startuje świeży proces API per przebieg.

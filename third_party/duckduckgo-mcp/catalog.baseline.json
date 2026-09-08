@@ -1,0 +1,80 @@
+{
+  "serverName": "duckduckgo-mcp",
+  "tools": [
+    {
+      "name": "web-search",
+      "title": "Web Search",
+      "description": "Search the web. Use mode=\"web\" for standard DuckDuckGo results (titles, URLs, snippets).\nUse mode=\"ai\" for AI-generated answers — pick backend=\"iask\" (default) or backend=\"monica\".",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query or question."
+          },
+          "mode": {
+            "type": "string",
+            "description": "Search mode. \"web\" returns DuckDuckGo search results. \"ai\" returns an AI-generated answer.",
+            "enum": [
+              "web",
+              "ai"
+            ],
+            "default": "web"
+          },
+          "backend": {
+            "type": "string",
+            "description": "AI backend when mode=\"ai\": \"iask\" or \"monica\". Ignored in web mode.",
+            "enum": [
+              "iask",
+              "monica"
+            ],
+            "default": "iask"
+          },
+          "numResults": {
+            "type": "integer",
+            "description": "Number of web results (1-20). Web mode only. Default: 3.",
+            "default": 3,
+            "minimum": 1,
+            "maximum": 20
+          },
+          "iaskMode": {
+            "type": "string",
+            "description": "IAsk mode when backend=\"iask\": \"question\", \"academic\", \"forums\", \"wiki\", or \"thinking\". Default: \"thinking\".",
+            "enum": [
+              "question",
+              "academic",
+              "forums",
+              "wiki",
+              "thinking"
+            ],
+            "default": "thinking"
+          },
+          "detailLevel": {
+            "type": "string",
+            "description": "IAsk detail level when backend=\"iask\": \"concise\", \"detailed\", or \"comprehensive\".",
+            "enum": [
+              "concise",
+              "detailed",
+              "comprehensive"
+            ]
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "digest": "c7ba855be63346bcb3170412f74e99d48f8ec21442bcd1b18e1052ae0807cca7",
+  "hashes": {
+    "web-search": {
+      "schema": "f264eddb4430dfda7efd94d9efa4f382a0ca82cdfbb6f5891c6492423c88b74f",
+      "description": "e042ad16d8f60ac3c8c9013032013c9e4d34519623c5fedee508a4722f543af0",
+      "complete": "7bcf61c354575c6ecb345c6a6a9975bdd5782fce3a24342473bff20fb345df28"
+    }
+  }
+}

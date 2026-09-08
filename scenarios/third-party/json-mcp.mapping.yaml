@@ -1,0 +1,8 @@
+
+server: json-mcp
+mapping:
+  read: [read_text_file, read_file, read_multiple_files]
+  query: [read_text_file, read_file, read_multiple_files]
+  filter: [read_text_file, read_file, read_multiple_files]
+  update: [edit_file, write_file]
+  list: [list_directory, list_directory_with_sizes, list_allowed_directories]

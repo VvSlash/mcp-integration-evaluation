@@ -1,0 +1,45 @@
+{
+  "_comment": "Manifest gotowych serwerow MCP. Konsumowany przez scripts/setup/windows/download_third_party_mcp_servers.ps1. Pola 'source' wymagaja weryfikacji dostepnosci/nazwy przy instalacji; wynik weryfikacji zapisuje sie w third_party/<name>/version.json. 'pinnedVersion': 'latest' oznacza 'rozwiaz i przypnij przy pierwszym pobraniu' - po rozwiazaniu wpisz tu konkretna wersje.",
+  "servers": [
+    {
+      "name": "sql-mcp",
+      "category": "sql",
+      "kind": "npm",
+      "source": "@henkey/postgres-mcp-server",
+      "pinnedVersion": "1.0.7",
+      "notes": "Pierwotny kandydat @modelcontextprotocol/server-postgres@0.6.2 jest oznaczony w npm jako niewspierany; wybrano utrzymywanego nastepce @henkey/postgres-mcp-server (17 narzedzi: konsolidowane meta-narzedzia + wyspecjalizowane). Uruchamianie: npx -y @henkey/postgres-mcp-server@1.0.7 --connection-string postgresql://... (lub env POSTGRES_CONNECTION_STRING). Pracuje na tej samej bazie orders co serwery wlasne - warunek porownywalnosci."
+    },
+    {
+      "name": "json-mcp",
+      "category": "json",
+      "kind": "npm",
+      "source": "@modelcontextprotocol/server-filesystem",
+      "pinnedVersion": "2026.7.10",
+      "notes": "Oficjalny serwer filesystem, aktywnie utrzymywany. Odrzuceni kandydaci: json-mcp-server@1.0.6 (narzedzia split/merge/find/validate - brak rodzin read/update), @gongrzhe/server-json-mcp@1.0.3. Katalog: 14 narzedzi. BRAK narzedzia query/JSONPath - model filtruje odczytana zawartosc w kontekscie (kontrast: narzedzia generyczne vs domenowe). Uruchamianie: npx -y @modelcontextprotocol/server-filesystem@2026.7.10 <katalog>; runner wskazuje KOPIE ROBOCZA datasets/.work/json-mcp/ (te same pliki co datasets/json/, odtwarzane hookami - fixture'y nietykane)."
+    },
+    {
+      "name": "excel-mcp",
+      "category": "excel",
+      "kind": "pip-venv",
+      "source": "excel-mcp-server",
+      "pinnedVersion": "0.1.8",
+      "notes": "excel-mcp-server (haris-musa), PyPI 0.1.8; instalacja w dedykowanym venv third_party/excel-mcp/.venv (kind pip-venv), uruchamianie: .venv/Scripts/excel-mcp-server.exe stdio. Alternatywa npm @negokaz/excel-mcp-server@0.12.0 odrzucona (narzedzia wymagaja SCIEZEK ABSOLUTNYCH - niedeterministyczne scenariusze miedzy maszynami). Nie wymaga instalacji MS Excel. Fixture: datasets/excel/sales.xlsx (setup_excel_fixtures.ps1); scenariusze mutujace na kopii roboczej datasets/.work/excel-mcp/ (hooki rejestru)."
+    },
+    {
+      "name": "duckduckgo-mcp",
+      "category": "websearch",
+      "kind": "npm",
+      "source": "@oevortex/ddg_search",
+      "pinnedVersion": "1.4.0",
+      "notes": "@oevortex/ddg_search@1.4.0 - npm, aktywnie utrzymywany, spawn npx spojny z pozostalymi gotowcami. Alternatywa duckduckgo-mcp-server (nickclyde, PyPI 0.5.0) dostepna jako fallback (wymagalaby venv/uvx). Katalog po inspekcji: 1 narzedzie web-search z trybami (web/answer/...) - rodzina fetch_content realizowana trybem, nie osobnym narzedziem. Jedyna zaleznosc sieciowa projektu - scenariusze WEB-* niedeterministyczne; uwaga na rate limiting DuckDuckGo."
+    },
+    {
+      "name": "blender-mcp",
+      "category": "blender",
+      "kind": "git",
+      "source": "https://github.com/ahujasid/blender-mcp",
+      "pinnedVersion": "6e99eb5",
+      "notes": "blender-mcp (ahujasid). Architektura DWUCZESCIOWA: (1) serwer MCP z PyPI blender-mcp==1.6.4 w third_party/blender-mcp/.venv (instaluje install_blender.ps1), (2) addon.py z tego klonu (pin = commit) instalowany w Blenderze 4.5.3 (config/blender/VERSION; blender-mcp wymaga Blendera 3.0+ - linia 4.5 LTS wspierana do 2027, NIE migrowac na 5.x bez weryfikacji zgodnosci addonu). Most: addon nasluchuje TCP :9876 wewnatrz DZIALAJACEGO Blendera GUI (w --background timery nie pompuja petli) - autostart jednym poleceniem: scripts/run/start_blender_bridge.ps1."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+
+scenarios:
+  - id: REST-001
+    name: Health check
+    category: rest
+    variant: baseline
+    expected_capability: health
+    expected_arguments: { method: GET, path: /health, expectedStatus: 200 }
+    success_criteria:
+      - status HTTP == 200 i body.status == "ok"
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-002
+    name: List products
+    category: rest
+    variant: baseline
+    expected_capability: list
+    expected_arguments: { method: GET, path: /products, expectedStatus: 200 }
+    expected_result_shape: { type: list }
+    success_criteria:
+      - status HTTP == 200
+      - total == expected.productsCount z seed.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-003
+    name: Get product 3
+    category: rest
+    variant: baseline
+    expected_capability: get_by_id
+    expected_arguments: { method: GET, path: /products/3, expectedStatus: 200 }
+    expected_result_shape: { type: object, fields: [id, name, category, price, stock] }
+    success_criteria:
+      - status HTTP == 200; pola zgodne z expected.productId3 z seed.json
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+
+  - id: REST-004
+    name: Create test order
+    category: rest
+    variant: baseline
+    expected_capability: create
+    expected_arguments:
+      method: POST
+      path: /orders
+      expectedStatus: 201
+      body: { productId: 3, quantity: 2, customerName: Jan Testowy }
+    expected_result_shape: { type: object, fields: [id, productId, quantity, customerName, status] }
+    success_criteria:
+      - status HTTP == 201; zamówienie widoczne w GET /orders
+      - /metrics pokazuje dokładnie oczekiwaną liczbę wywołań (weryfikacja unnecessaryToolCalls w wariantach MCP)
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: >
+      Mutuje stan w pamięci API (każda iteracja dodaje zamówienie) — stan wraca do
+      seedu przy restarcie procesu; runner startuje świeży proces na każdy przebieg.

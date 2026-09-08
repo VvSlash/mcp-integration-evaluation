@@ -1,0 +1,28 @@
+{
+  "framework": "deepeval",
+  "defaults": {
+    "category": "sql",
+    "variant": "mcp_llm",
+    "serverKind": "own",
+    "serverName": "sql-controlled",
+    "model": "qwen3.5:latest",
+    "deterministic": false
+  },
+  "records": [
+    {
+      "scenarioId": "SQL-001",
+      "iteration": 1,
+      "success": true,
+      "toolSelectionCorrect": true,
+      "argumentCorrectness": 1.0,
+      "finalAnswerCorrect": true,
+      "latencyMs": 14100.2,
+      "scores": { "taskCompletion": 0.9, "toolCorrectness": 1.0 },
+      "labels": { "judgeModel": "qwen3.5:latest" }
+    },
+    {
+      "iteration": 2,
+      "success": false
+    }
+  ]
+}

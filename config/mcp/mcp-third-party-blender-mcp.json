@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "third-party-blender-mcp": {
+      "command": "third_party/blender-mcp/.venv/Scripts/blender-mcp.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

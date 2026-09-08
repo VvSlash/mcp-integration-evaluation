@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "third-party-sql-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@henkey/postgres-mcp-server@1.0.7",
+        "--connection-string",
+        "postgresql://mcp_user:mcp_password@localhost:5432/mcp_research"
+      ],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

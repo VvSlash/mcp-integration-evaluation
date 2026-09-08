@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "research-mcp-rest": {
+      "command": "npx",
+      "args": ["tsx", "src/servers/rest-api/server.ts"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MCP_REST_SERVER_NAME": "research-mcp-rest-server",
+        "MCP_REST_SERVER_VERSION": "0.1.0",
+        "REST_API_PORT": "4100"
+      }
+    }
+  }
+}

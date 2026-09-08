@@ -1,0 +1,125 @@
+scenarios:
+  - id: JSON-001
+    name: Read products file
+    category: json
+    variant: mcp_llm
+    server: json
+    prompt: "Read the list of products from products.json and report how many
+      products it contains. Return structured JSON with fields: count."
+    expected_tools:
+      - json_read_file
+    expected_tool_family: read
+    expected_arguments:
+      file: products.json
+    success_criteria:
+      - toolCallSuccess == true
+      - zwrócony count == productsCount z products.expected.json
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-002
+    name: Find product with id 17
+    category: json
+    variant: mcp_llm
+    server: json
+    prompt: Find the product with id 17 in products.json. Return the matching
+      product as structured JSON.
+    expected_tools:
+      - json_query
+    expected_tool_family: query
+    expected_arguments:
+      file: products.json
+      path: $[?(@.id==17)]
+    success_criteria:
+      - toolCallSuccess == true
+      - dokładnie 1 rekord z id == 17
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerValidJson
+    iterations: 10
+    deterministic: false
+    notes: >
+      JSONPath generowany przez LLM bywa błędny — argumentCorrectness dla
+      surowego JSONPath ocenia się po skutku zapytania.
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-003
+    name: Count electronics with price over 100
+    category: json
+    variant: mcp_llm
+    server: json
+    prompt: "Count the products in category electronics with price greater than 100
+      in products.json. Return structured JSON with fields: count."
+    expected_tools:
+      - json_query
+    expected_tool_family: filter
+    expected_arguments:
+      file: products.json
+      path: $[?(@.category=="electronics" && @.price>100)]
+    success_criteria:
+      - toolCallSuccess == true
+      - count == electronicsPriceOver100Count z products.expected.json
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    expected_result_shape:
+      type: list
+      minCount: 1
+      fields:
+        - id
+        - price
+  - id: JSON-004
+    name: Update price of product 17 in working copy
+    category: json
+    variant: mcp_llm
+    server: json
+    prompt: Change the price of product id 17 to 249.99 in products.json (the update
+      goes to a working copy). Confirm the new value. Return structured JSON.
+    expected_tools:
+      - json_update_value
+    expected_tool_family: update
+    expected_arguments:
+      file: products.json
+      path: $[?(@.id==17)].price
+      value: 249.99
+    success_criteria:
+      - toolCallSuccess == true
+      - kopia robocza zawiera nową cenę; fixture wzorcowy nietknięty
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - argumentCorrectness
+      - numberOfToolCalls
+    iterations: 10
+    deterministic: false
+    notes: Runner odtwarza kopię roboczą przed każdą iteracją.
+    expected_result_shape:
+      type: object

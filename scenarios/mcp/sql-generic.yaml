@@ -1,0 +1,190 @@
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: mcp
+    server: sql-generic
+    expected_tools:
+      - filter_rows
+    expected_arguments: &a1
+      table: orders
+      column: status
+      operator: eq
+      value: paid
+      limit: 5
+    expected_result_shape:
+      type: list
+      maxCount: 5
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "paid"
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: "Same task/prompt/data; generic single-predicate interface. Shape
+      describes the intermediate tool output; task oracle checks the completed
+      goal. Client/model completes filtering, sorting or aggregation. Read all
+      15 seed rows; pagination required for larger fixtures."
+    minimum_tool_calls: 1
+    deterministic_plan:
+      - tool: filter_rows
+        arguments: *a1
+    result_transform: none
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: mcp
+    server: sql-generic
+    expected_tools:
+      - filter_rows
+    expected_arguments: &a2
+      table: orders
+      column: status
+      operator: eq
+      value: shipped
+      limit: 5
+    expected_result_shape:
+      type: list
+      maxCount: 5
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "shipped"
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: "Same task/prompt/data; generic single-predicate interface. Shape
+      describes the intermediate tool output; task oracle checks the completed
+      goal. Client/model completes filtering, sorting or aggregation. Read all
+      15 seed rows; pagination required for larger fixtures."
+    minimum_tool_calls: 1
+    deterministic_plan:
+      - tool: filter_rows
+        arguments: *a2
+    result_transform: none
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: mcp
+    server: sql-generic
+    expected_tools:
+      - filter_rows
+    expected_arguments: &a3
+      table: orders
+      column: total_amount
+      operator: gte
+      value: 300
+      limit: 50
+    expected_result_shape:
+      type: list
+      maxCount: 50
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie total_amount w zakresie 300–1000
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: "Same task/prompt/data; generic single-predicate interface. Shape
+      describes the intermediate tool output; task oracle checks the completed
+      goal. Client/model completes filtering, sorting or aggregation. Read all
+      15 seed rows; pagination required for larger fixtures."
+    minimum_tool_calls: 1
+    deterministic_plan:
+      - tool: filter_rows
+        arguments: *a3
+    result_transform: amount_range
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: mcp
+    server: sql-generic
+    expected_tools:
+      - read_table
+    expected_arguments: &a4
+      table: orders
+      limit: 50
+      offset: 0
+    expected_result_shape:
+      type: list
+      maxCount: 50
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - 10 rekordów posortowanych malejąco po created_at
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+    iterations: 30
+    deterministic: true
+    notes: "Same task/prompt/data; generic single-predicate interface. Shape
+      describes the intermediate tool output; task oracle checks the completed
+      goal. Client/model completes filtering, sorting or aggregation. Read all
+      15 seed rows; pagination required for larger fixtures."
+    minimum_tool_calls: 1
+    deterministic_plan:
+      - tool: read_table
+        arguments: *a4
+    result_transform: recent_orders
+  - id: SQL-007
+    name: Order statistics grouped by status
+    category: sql
+    variant: mcp
+    server: sql-generic
+    expected_tools:
+      - read_table
+    expected_capability: aggregation
+    expected_arguments: &a5
+      table: orders
+      limit: 50
+      offset: 0
+    expected_result_shape:
+      type: list
+      maxCount: 50
+      fields:
+        - id
+        - status
+        - total_amount
+    success_criteria:
+      - toolCallSuccess == true
+      - agregaty count/sum/avg zgodne z wartościami wyliczonymi bezpośrednio z
+        bazy
+    metrics:
+      - latencyMs
+      - successRate
+      - errorRate
+      - resultShapeCorrectness
+    iterations: 30
+    deterministic: true
+    notes: "Same task/prompt/data; generic single-predicate interface. Shape
+      describes the intermediate tool output; task oracle checks the completed
+      goal. Client/model completes filtering, sorting or aggregation. Read all
+      15 seed rows; pagination required for larger fixtures."
+    minimum_tool_calls: 1
+    deterministic_plan:
+      - tool: read_table
+        arguments: *a5
+    result_transform: status_statistics

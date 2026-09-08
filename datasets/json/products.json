@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1,
+    "name": "Ultra Ball 1",
+    "category": "toys",
+    "price": 298.7,
+    "stock": 88
+  },
+  {
+    "id": 2,
+    "name": "Compact Camera 2",
+    "category": "toys",
+    "price": 380.05,
+    "stock": 68
+  },
+  {
+    "id": 3,
+    "name": "Pro Notebook 3",
+    "category": "sports",
+    "price": 343.54,
+    "stock": 17
+  },
+  {
+    "id": 4,
+    "name": "Compact Ball 4",
+    "category": "books",
+    "price": 28.68,
+    "stock": 196
+  },
+  {
+    "id": 5,
+    "name": "Max Notebook 5",
+    "category": "sports",
+    "price": 275.45,
+    "stock": 28
+  },
+  {
+    "id": 6,
+    "name": "Mini Router 6",
+    "category": "sports",
+    "price": 208.91,
+    "stock": 105
+  },
+  {
+    "id": 7,
+    "name": "Smart Chair 7",
+    "category": "home",
+    "price": 366.84,
+    "stock": 157
+  },
+  {
+    "id": 8,
+    "name": "Smart Camera 8",
+    "category": "sports",
+    "price": 246.29,
+    "stock": 90
+  },
+  {
+    "id": 9,
+    "name": "Ultra Notebook 9",
+    "category": "toys",
+    "price": 282.74,
+    "stock": 66
+  },
+  {
+    "id": 10,
+    "name": "Classic Camera 10",
+    "category": "toys",
+    "price": 316.24,
+    "stock": 182
+  },
+  {
+    "id": 11,
+    "name": "Mini Ball 11",
+    "category": "electronics",
+    "price": 360.75,
+    "stock": 44
+  },
+  {
+    "id": 12,
+    "name": "Compact Kettle 12",
+    "category": "electronics",
+    "price": 499.71,
+    "stock": 195
+  },
+  {
+    "id": 13,
+    "name": "Eco Notebook 13",
+    "category": "home",
+    "price": 67.32,
+    "stock": 74
+  },
+  {
+    "id": 14,
+    "name": "Eco Chair 14",
+    "category": "home",
+    "price": 398.76,
+    "stock": 67
+  },
+  {
+    "id": 15,
+    "name": "Classic Kettle 15",
+    "category": "electronics",
+    "price": 400.3,
+    "stock": 159
+  },
+  {
+    "id": 16,
+    "name": "Max Chair 16",
+    "category": "home",
+    "price": 294.78,
+    "stock": 22
+  },
+  {
+    "id": 17,
+    "name": "Max Notebook 17",
+    "category": "sports",
+    "price": 256.75,
+    "stock": 126
+  },
+  {
+    "id": 18,
+    "name": "Max Speaker 18",
+    "category": "books",
+    "price": 186.9,
+    "stock": 29
+  },
+  {
+    "id": 19,
+    "name": "Max Notebook 19",
+    "category": "books",
+    "price": 12.75,
+    "stock": 180
+  },
+  {
+    "id": 20,
+    "name": "Compact Notebook 20",
+    "category": "toys",
+    "price": 353.28,
+    "stock": 151
+  },
+  {
+    "id": 21,
+    "name": "Pro Lamp 21",
+    "category": "sports",
+    "price": 53.3,
+    "stock": 71
+  },
+  {
+    "id": 22,
+    "name": "Eco Kettle 22",
+    "category": "toys",
+    "price": 131.83,
+    "stock": 87
+  },
+  {
+    "id": 23,
+    "name": "Mini Lamp 23",
+    "category": "electronics",
+    "price": 30.97,
+    "stock": 44
+  },
+  {
+    "id": 24,
+    "name": "Compact Ball 24",
+    "category": "toys",
+    "price": 249.17,
+    "stock": 130
+  },
+  {
+    "id": 25,
+    "name": "Smart Router 25",
+    "category": "toys",
+    "price": 194.92,
+    "stock": 178
+  },
+  {
+    "id": 26,
+    "name": "Classic Speaker 26",
+    "category": "electronics",
+    "price": 278.17,
+    "stock": 152
+  },
+  {
+    "id": 27,
+    "name": "Max Notebook 27",
+    "category": "home",
+    "price": 195.65,
+    "stock": 111
+  },
+  {
+    "id": 28,
+    "name": "Max Router 28",
+    "category": "electronics",
+    "price": 321.15,
+    "stock": 104
+  },
+  {
+    "id": 29,
+    "name": "Max Chair 29",
+    "category": "electronics",
+    "price": 40.72,
+    "stock": 140
+  },
+  {
+    "id": 30,
+    "name": "Max Notebook 30",
+    "category": "toys",
+    "price": 411.77,
+    "stock": 131
+  },
+  {
+    "id": 31,
+    "name": "Classic Kettle 31",
+    "category": "toys",
+    "price": 50.4,
+    "stock": 17
+  },
+  {
+    "id": 32,
+    "name": "Compact Speaker 32",
+    "category": "sports",
+    "price": 498.89,
+    "stock": 197
+  },
+  {
+    "id": 33,
+    "name": "Pro Lamp 33",
+    "category": "sports",
+    "price": 197.33,
+    "stock": 13
+  },
+  {
+    "id": 34,
+    "name": "Eco Lamp 34",
+    "category": "sports",
+    "price": 483.67,
+    "stock": 50
+  },
+  {
+    "id": 35,
+    "name": "Classic Router 35",
+    "category": "toys",
+    "price": 382.68,
+    "stock": 27
+  },
+  {
+    "id": 36,
+    "name": "Eco Router 36",
+    "category": "sports",
+    "price": 481.78,
+    "stock": 166
+  },
+  {
+    "id": 37,
+    "name": "Mini Router 37",
+    "category": "sports",
+    "price": 134.72,
+    "stock": 138
+  },
+  {
+    "id": 38,
+    "name": "Max Router 38",
+    "category": "electronics",
+    "price": 457.4,
+    "stock": 32
+  },
+  {
+    "id": 39,
+    "name": "Compact Camera 39",
+    "category": "electronics",
+    "price": 192.71,
+    "stock": 121
+  },
+  {
+    "id": 40,
+    "name": "Smart Lamp 40",
+    "category": "electronics",
+    "price": 493.53,
+    "stock": 105
+  },
+  {
+    "id": 41,
+    "name": "Compact Ball 41",
+    "category": "home",
+    "price": 97.78,
+    "stock": 65
+  },
+  {
+    "id": 42,
+    "name": "Eco Notebook 42",
+    "category": "electronics",
+    "price": 63.18,
+    "stock": 185
+  },
+  {
+    "id": 43,
+    "name": "Max Lamp 43",
+    "category": "books",
+    "price": 96.73,
+    "stock": 139
+  },
+  {
+    "id": 44,
+    "name": "Smart Speaker 44",
+    "category": "books",
+    "price": 499.73,
+    "stock": 27
+  },
+  {
+    "id": 45,
+    "name": "Eco Notebook 45",
+    "category": "toys",
+    "price": 379.88,
+    "stock": 144
+  },
+  {
+    "id": 46,
+    "name": "Smart Router 46",
+    "category": "sports",
+    "price": 494.12,
+    "stock": 26
+  },
+  {
+    "id": 47,
+    "name": "Pro Lamp 47",
+    "category": "sports",
+    "price": 390.92,
+    "stock": 140
+  },
+  {
+    "id": 48,
+    "name": "Pro Kettle 48",
+    "category": "sports",
+    "price": 459.63,
+    "stock": 89
+  },
+  {
+    "id": 49,
+    "name": "Compact Router 49",
+    "category": "sports",
+    "price": 382.88,
+    "stock": 102
+  },
+  {
+    "id": 50,
+    "name": "Eco Speaker 50",
+    "category": "toys",
+    "price": 235.35,
+    "stock": 171
+  },
+  {
+    "id": 51,
+    "name": "Eco Notebook 51",
+    "category": "home",
+    "price": 68.35,
+    "stock": 26
+  },
+  {
+    "id": 52,
+    "name": "Smart Ball 52",
+    "category": "electronics",
+    "price": 334.26,
+    "stock": 26
+  },
+  {
+    "id": 53,
+    "name": "Ultra Camera 53",
+    "category": "toys",
+    "price": 87.35,
+    "stock": 15
+  },
+  {
+    "id": 54,
+    "name": "Mini Notebook 54",
+    "category": "electronics",
+    "price": 303.49,
+    "stock": 174
+  },
+  {
+    "id": 55,
+    "name": "Ultra Camera 55",
+    "category": "toys",
+    "price": 204.83,
+    "stock": 175
+  },
+  {
+    "id": 56,
+    "name": "Smart Speaker 56",
+    "category": "sports",
+    "price": 413.28,
+    "stock": 29
+  },
+  {
+    "id": 57,
+    "name": "Eco Camera 57",
+    "category": "sports",
+    "price": 190.89,
+    "stock": 3
+  },
+  {
+    "id": 58,
+    "name": "Max Camera 58",
+    "category": "home",
+    "price": 408.36,
+    "stock": 130
+  },
+  {
+    "id": 59,
+    "name": "Max Camera 59",
+    "category": "sports",
+    "price": 449,
+    "stock": 46
+  },
+  {
+    "id": 60,
+    "name": "Compact Camera 60",
+    "category": "sports",
+    "price": 420.24,
+    "stock": 182
+  }
+]

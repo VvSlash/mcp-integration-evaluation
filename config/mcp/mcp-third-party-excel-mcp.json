@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "third-party-excel-mcp": {
+      "command": "third_party/excel-mcp/.venv/Scripts/excel-mcp-server.exe",
+      "args": ["stdio"],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

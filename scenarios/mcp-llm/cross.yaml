@@ -1,0 +1,81 @@
+scenarios:
+  - id: XSRV-001
+    name: REST products summary into JSON file
+    category: cross
+    variant: mcp_llm
+    server: null
+    prompt: >
+      Fetch the list of products from the local REST API. Then, in the JSON file
+      summary.json, set the field "count" to the number of products and the
+      field "averagePrice" to their average price rounded to 2 decimals (update
+      each field separately). Finally return a JSON object with the values you
+      wrote.
+    expected_tools:
+      - rest_get_products
+      - json_update_value
+    expected_tool_family: cross_workflow
+    expected_capability: fetch_then_write
+    expected_arguments:
+      file: summary.json
+    success_criteria:
+      - kopia robocza summary.json zawiera poprawne count (== productsCount z
+        seed.json REST) i averagePrice
+      - fixture wzorcowy summary.json nietknięty (null-e)
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - unnecessaryToolCalls
+      - resultIntegrationScore
+    iterations: 10
+    deterministic: false
+    notes: Minimal call count is explicit; expected_tools lists alternatives, not a
+      call count. Reset all connected sources before every trial.
+    minimum_tool_calls: 3
+    required_servers:
+      - rest-api
+      - json
+  - id: XSRV-002
+    name: Top 3 paid orders as scaled cubes in Blender
+    category: cross
+    variant: mcp_llm
+    server: null
+    prompt: >
+      Find the 3 most expensive paid orders in the database (highest
+      total_amount). Then, in Blender, create one cube per order and scale each
+      cube by the order's value (use size = total_amount / 100). Finally return
+      a JSON object listing the orders (id and total_amount) and the created
+      cubes (name and size).
+    expected_tools:
+      - pg_search_orders
+      - execute_read_query
+      - blender_create_cube
+    expected_tool_family: cross_workflow
+    expected_capability: fetch_then_build_scene
+    expected_arguments:
+      sql: SELECT id, total_amount FROM orders WHERE status = 'paid' ORDER BY
+        total_amount DESC LIMIT 3
+    success_criteria:
+      - scena zawiera 3 kostki (walidacja XSRV-002-reference — npm run
+        validate:blender-scene)
+      - skala kostek monotoniczna względem total_amount (dimensions z
+        get_scene_summary vs baza; automatyczna + jakościowa, R8)
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - unnecessaryToolCalls
+      - resultIntegrationScore
+    iterations: 10
+    deterministic: false
+    notes: Minimal call count is explicit; expected_tools lists alternatives, not a
+      call count. Reset all connected sources before every trial.
+    minimum_tool_calls: 4
+    required_servers:
+      - sql-controlled
+      - sql-minimal
+      - blender

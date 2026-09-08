@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "research-mcp-postgres-sql": {
+      "command": "npx",
+      "args": ["tsx", "src/servers/sql-minimal/server.ts"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MCP_SQL_SERVER_NAME": "research-mcp-sql-server",
+        "MCP_SQL_SERVER_VERSION": "0.1.0",
+        "POSTGRES_HOST": "localhost",
+        "POSTGRES_PORT": "5432",
+        "POSTGRES_DB": "mcp_research",
+        "POSTGRES_USER": "mcp_user",
+        "POSTGRES_PASSWORD": "mcp_password",
+        "POSTGRES_SSL": "false",
+        "POSTGRES_QUERY_TIMEOUT_MS": "3000",
+        "TOOL_MAX_LIMIT": "50"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "sheetNames": [
+    "Sales2025",
+    "Products"
+  ],
+  "salesRowCount": 220,
+  "totalSum": 8291069.6,
+  "northQuantityOver50Count": 16,
+  "productsCount": 8,
+  "seed": 20260708,
+  "tolerance": 0.01
+}

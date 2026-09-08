@@ -1,0 +1,9 @@
+{
+  "_comment": "Konfiguracja modelu i parametrow generacji Ollamy (parametry przypiete dla powtarzalnosci). Pole 'model' to tag ZADANY - faktyczny tag weryfikuje i zapisuje do .env skrypt scripts/setup/windows/install_ollama_models.ps1. Parametry 'options' sa przekazywane przez klienta Ollamy (src/clients/ollama/) w kazdym przebiegu.",
+  "model": "qwen3.5",
+  "options": {
+    "temperature": 0,
+    "num_ctx": 8192,
+    "seed": 42
+  }
+}

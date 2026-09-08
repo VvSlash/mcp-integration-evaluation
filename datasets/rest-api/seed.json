@@ -1,0 +1,228 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Thriller 1",
+      "category": "electronics",
+      "price": 106.8,
+      "stock": 38
+    },
+    {
+      "id": 2,
+      "name": "Sluchawki 2",
+      "category": "home",
+      "price": 89.93,
+      "stock": 69
+    },
+    {
+      "id": 3,
+      "name": "Czajnik 3",
+      "category": "home",
+      "price": 189.57,
+      "stock": 92
+    },
+    {
+      "id": 4,
+      "name": "Mikser 4",
+      "category": "electronics",
+      "price": 213.87,
+      "stock": 81
+    },
+    {
+      "id": 5,
+      "name": "Atlas 5",
+      "category": "electronics",
+      "price": 88.17,
+      "stock": 52
+    },
+    {
+      "id": 6,
+      "name": "Atlas 6",
+      "category": "books",
+      "price": 130.67,
+      "stock": 90
+    },
+    {
+      "id": 7,
+      "name": "Router 7",
+      "category": "books",
+      "price": 191,
+      "stock": 59
+    },
+    {
+      "id": 8,
+      "name": "Router 8",
+      "category": "books",
+      "price": 238.8,
+      "stock": 94
+    },
+    {
+      "id": 9,
+      "name": "Lampa 9",
+      "category": "home",
+      "price": 219.28,
+      "stock": 83
+    },
+    {
+      "id": 10,
+      "name": "Thriller 10",
+      "category": "electronics",
+      "price": 207.55,
+      "stock": 97
+    },
+    {
+      "id": 11,
+      "name": "Lampa 11",
+      "category": "books",
+      "price": 115.81,
+      "stock": 98
+    },
+    {
+      "id": 12,
+      "name": "Atlas 12",
+      "category": "home",
+      "price": 175.87,
+      "stock": 29
+    },
+    {
+      "id": 13,
+      "name": "Lampa 13",
+      "category": "home",
+      "price": 82.86,
+      "stock": 20
+    },
+    {
+      "id": 14,
+      "name": "Router 14",
+      "category": "books",
+      "price": 104.52,
+      "stock": 53
+    },
+    {
+      "id": 15,
+      "name": "Sluchawki 15",
+      "category": "home",
+      "price": 48.01,
+      "stock": 60
+    },
+    {
+      "id": 16,
+      "name": "Lampa 16",
+      "category": "books",
+      "price": 110.33,
+      "stock": 72
+    },
+    {
+      "id": 17,
+      "name": "Czajnik 17",
+      "category": "books",
+      "price": 156.74,
+      "stock": 56
+    },
+    {
+      "id": 18,
+      "name": "Atlas 18",
+      "category": "books",
+      "price": 292.42,
+      "stock": 76
+    },
+    {
+      "id": 19,
+      "name": "Czajnik 19",
+      "category": "home",
+      "price": 198.04,
+      "stock": 52
+    },
+    {
+      "id": 20,
+      "name": "Router 20",
+      "category": "electronics",
+      "price": 291.89,
+      "stock": 54
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "productId": 12,
+      "quantity": 3,
+      "customerName": "Jan Nowak",
+      "status": "shipped"
+    },
+    {
+      "id": 2,
+      "productId": 10,
+      "quantity": 3,
+      "customerName": "Jan Nowak",
+      "status": "shipped"
+    },
+    {
+      "id": 3,
+      "productId": 9,
+      "quantity": 1,
+      "customerName": "Tomasz Kaminski",
+      "status": "pending"
+    },
+    {
+      "id": 4,
+      "productId": 12,
+      "quantity": 3,
+      "customerName": "Ewa Wojcik",
+      "status": "shipped"
+    },
+    {
+      "id": 5,
+      "productId": 15,
+      "quantity": 3,
+      "customerName": "Ewa Wojcik",
+      "status": "paid"
+    },
+    {
+      "id": 6,
+      "productId": 17,
+      "quantity": 1,
+      "customerName": "Anna Kowalska",
+      "status": "pending"
+    },
+    {
+      "id": 7,
+      "productId": 1,
+      "quantity": 2,
+      "customerName": "Jan Nowak",
+      "status": "pending"
+    },
+    {
+      "id": 8,
+      "productId": 12,
+      "quantity": 3,
+      "customerName": "Ewa Wojcik",
+      "status": "paid"
+    },
+    {
+      "id": 9,
+      "productId": 7,
+      "quantity": 1,
+      "customerName": "Jan Nowak",
+      "status": "pending"
+    },
+    {
+      "id": 10,
+      "productId": 15,
+      "quantity": 1,
+      "customerName": "Jan Nowak",
+      "status": "paid"
+    }
+  ],
+  "expected": {
+    "productsCount": 20,
+    "ordersCount": 10,
+    "productId3": {
+      "id": 3,
+      "name": "Czajnik 3",
+      "category": "home",
+      "price": 189.57,
+      "stock": 92
+    },
+    "seed": 20260707
+  }
+}

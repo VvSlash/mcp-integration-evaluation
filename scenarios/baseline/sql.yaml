@@ -1,0 +1,54 @@
+
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: baseline
+    expected_arguments: { status: paid, limit: 5 }
+    expected_result_shape: { type: list, maxCount: 5, fields: [id, status, total_amount] }
+    success_criteria:
+      - wszystkie zwrócone rekordy mają status == "paid"
+      - liczba rekordów <= 5
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-001, semantyka bez zmian.
+
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: baseline
+    expected_arguments: { status: shipped, limit: 5 }
+    expected_result_shape: { type: list, maxCount: 5, fields: [id, status, total_amount] }
+    success_criteria:
+      - wszystkie zwrócone rekordy mają status == "shipped"
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-002, semantyka bez zmian.
+
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: baseline
+    expected_arguments: { minAmount: 300, maxAmount: 1000, limit: 10 }
+    expected_result_shape: { type: list, maxCount: 10, fields: [id, status, total_amount] }
+    success_criteria:
+      - wszystkie total_amount w zakresie 300–1000
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-003, semantyka bez zmian.
+
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: baseline
+    expected_arguments: { limit: 10 }
+    expected_result_shape: { type: list, maxCount: 10, fields: [id, status, total_amount, created_at] }
+    success_criteria:
+      - 10 rekordów posortowanych malejąco po created_at
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-004, semantyka bez zmian.

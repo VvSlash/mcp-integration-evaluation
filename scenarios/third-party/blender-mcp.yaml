@@ -1,0 +1,48 @@
+
+scenarios:
+  - id: BLEND-001
+    name: Cube and camera pointed at it
+    category: blender
+    variant: third_party_mcp_llm
+    server: blender-mcp
+    prompt: "In Blender, clear the default scene, then create a cube and a camera pointed at the cube. Verify by inspecting the scene and return structured JSON listing the created objects."
+    expected_tool_family: object_create
+    expected_capability: scene_create
+    success_criteria:
+      - scena zawiera kostkę i kamerę (get_scene_info vs BLEND-001-reference z reference_scenes.yaml)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, numberOfToolCalls, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: Czyszczenie sceny w prompcie — domyślna scena Blendera już zawiera Cube/Camera/Light.
+
+  - id: BLEND-002
+    name: Red sphere with a light
+    category: blender
+    variant: third_party_mcp_llm
+    server: blender-mcp
+    prompt: "In Blender, clear the default scene, then create a sphere with a red material and add a light to the scene. Verify by inspecting the scene and return structured JSON listing the objects and the sphere's material color."
+    expected_tool_family: material
+    expected_capability: object_with_material
+    success_criteria:
+      - kula z materiałem ~czerwonym + światło (BLEND-002-reference; ocena automatyczna + jakościowa)
+      - finalAnswerValidJson == true
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, numberOfToolCalls, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+
+  - id: BLEND-003
+    name: Scene summary
+    category: blender
+    variant: third_party_mcp_llm
+    server: blender-mcp
+    prompt: "Inspect the current Blender scene and return structured JSON summarising all objects (name and type for each)."
+    expected_tool_family: scene_inspect
+    expected_capability: scene_inspect
+    success_criteria:
+      - podsumowanie wymienia wszystkie obiekty bieżącej sceny (BLEND-003-reference)
+      - finalAnswerValidJson == true; resultIntegrationScore > 0
+    metrics: [latencyMs, tokenUsage, toolSelectionAccuracy, resultIntegrationScore]
+    iterations: 10
+    deterministic: false
+    notes: Najprostszy scenariusz serii — smoke test mostu (bez mutacji sceny).

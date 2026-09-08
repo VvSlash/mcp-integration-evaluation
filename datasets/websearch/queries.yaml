@@ -1,0 +1,30 @@
+
+queries:
+  - id: WEB-001
+    purpose: fakt bieżący po dacie cutoff modelu (wymusza użycie wyszukiwarki)
+    prompt: "What is the latest stable release version of Blender (the 3D software) right now? Use web search to verify. Return structured JSON with fields: version."
+    expected_answer: >
+      Blender 5.1 (wydany 2026-03-17); UWAGA: na lipiec 2026 planowany Blender 5.2 LTS —
+      odpowiedź "5.2" po jego premierze również uznawać za poprawną (dryf R5).
+    established_on: 2026-07-12
+    established_from: "blender.org/download/releases + CG Channel (roadmap 2026)"
+    match_criterion: odpowiedź wymienia wersję 5.1 (lub 5.2, jeśli już wydana w dniu przebiegu)
+    judge: human
+
+  - id: WEB-002
+    purpose: pytanie ze znaną, stabilną odpowiedzią wzorcową (trafność względem wzorca)
+    prompt: "What is the officially recognised height of Mount Everest in meters? Use web search to verify. Return structured JSON with fields: heightMeters."
+    expected_answer: "8848.86 m (pomiar 2020, uznawany przez Nepal i Chiny); akceptowalne zaokrąglenia: 8849 m lub 8848 m"
+    established_on: 2026-07-12
+    established_from: "powszechnie uznany pomiar z 2020 r."
+    match_criterion: wartość 8848–8849 m w odpowiedzi
+    judge: human
+
+  - id: WEB-003
+    purpose: model zna odpowiedź z pamięci — czy mimo to użył wyszukiwarki i cytuje wyniki (resultIntegrationScore)
+    prompt: "What is the capital of Australia? Use web search to confirm and base your answer on the search results. Return structured JSON with fields: capital."
+    expected_answer: "Canberra"
+    established_on: 2026-07-12
+    established_from: "fakt stabilny"
+    match_criterion: toolCallRequested == true ORAZ odpowiedź odwołuje się do treści wyników (resultIntegrationScore > 0)
+    judge: llm

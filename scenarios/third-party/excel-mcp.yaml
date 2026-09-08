@@ -1,0 +1,99 @@
+scenarios:
+  - id: XLSX-001
+    name: List worksheet names
+    category: excel
+    variant: third_party_mcp_llm
+    server: excel-mcp
+    prompt: "List the worksheet names in the Excel file
+      {{REPO}}/datasets/.work/excel-mcp/sales.xlsx. Return structured JSON with
+      fields: sheets (array of names)."
+    expected_tool_family: sheet_list
+    expected_capability: sheet_list
+    success_criteria:
+      - toolCallSuccess == true
+      - zwrócone arkusze == sheetNames z sales.expected.json (Sales2025,
+        Products)
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+  - id: XLSX-002
+    name: Sum of the total column in Sales2025
+    category: excel
+    variant: third_party_mcp_llm
+    server: excel-mcp
+    prompt: "Compute the sum of the 'total' column in sheet Sales2025 of the Excel
+      file {{REPO}}/datasets/.work/excel-mcp/sales.xlsx. Return structured JSON
+      with fields: totalSum."
+    expected_tool_family: read_range
+    expected_capability: aggregate
+    success_criteria:
+      - toolCallSuccess == true
+      - totalSum == totalSum z sales.expected.json (tolerancja 0.01)
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    notes: >
+      220 wierszy z metadanymi komórek w kontekście modelu — duży koszt tokenowy
+      (kontrast z SQL SUM()). Alternatywnie model może użyć apply_formula.
+  - id: XLSX-003
+    name: Rows from region north with quantity over 50
+    category: excel
+    variant: third_party_mcp_llm
+    server: excel-mcp
+    prompt: "Count the rows in sheet Sales2025 of
+      {{REPO}}/datasets/.work/excel-mcp/sales.xlsx where region is 'north' and
+      quantity is greater than 50. Return structured JSON with fields: count."
+    expected_tool_family: search
+    expected_capability: filter
+    success_criteria:
+      - toolCallSuccess == true
+      - count == northQuantityOver50Count z sales.expected.json
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - finalAnswerCorrectness
+    iterations: 10
+    deterministic: false
+    notes: Brak narzędzia search — filtrowanie w kontekście modelu (wzorzec jak
+      json-mcp).
+  - id: XLSX-004
+    name: Write filtered rows to a new TestResults sheet
+    category: excel
+    variant: third_party_mcp_llm
+    server: excel-mcp
+    prompt: In the Excel file {{REPO}}/datasets/.work/excel-mcp/sales.xlsx, create a
+      new sheet named TestResults and write into it the rows from Sales2025
+      where region is 'north' and quantity is greater than 50 (include a header
+      row). Return structured JSON confirming the sheet name and row count.
+    expected_tool_family: write
+    expected_capability: write_sheet
+    success_criteria:
+      - toolCallSuccess == true
+      - kopia robocza zawiera arkusz TestResults z oczekiwanymi wierszami;
+        fixture nietknięty
+      - finalAnswerValidJson == true
+    metrics:
+      - latencyMs
+      - tokenUsage
+      - toolSelectionAccuracy
+      - numberOfToolCalls
+      - unnecessaryToolCalls
+    iterations: 10
+    deterministic: false
+    notes: >
+      Sekwencja read → create_worksheet → write_data_to_excel (hook odtwarza
+      kopię przed iteracją). Wynik XLSX-003 jako wejście — scenariusz
+      najtrudniejszy z serii.
+    minimum_tool_calls: 3

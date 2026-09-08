@@ -1,0 +1,84 @@
+
+scenarios:
+  - id: SQL-001
+    name: Search paid orders
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    expected_tools: [pg_search_orders]
+    expected_arguments: { status: paid, limit: 5 }
+    expected_result_shape: { type: list, maxCount: 5, fields: [id, status, total_amount] }
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "paid"
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-001, semantyka bez zmian.
+
+  - id: SQL-002
+    name: Search shipped orders
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    expected_tools: [pg_search_orders]
+    expected_arguments: { status: shipped, limit: 5 }
+    expected_result_shape: { type: list, maxCount: 5, fields: [id, status, total_amount] }
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie zwrócone rekordy mają status == "shipped"
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-002, semantyka bez zmian.
+
+  - id: SQL-003
+    name: Search orders by amount range
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    expected_tools: [pg_search_orders]
+    expected_arguments: { minAmount: 300, maxAmount: 1000, limit: 10 }
+    expected_result_shape: { type: list, maxCount: 10, fields: [id, status, total_amount] }
+    success_criteria:
+      - toolCallSuccess == true
+      - wszystkie total_amount w zakresie 300–1000
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-003, semantyka bez zmian.
+
+  - id: SQL-004
+    name: Search recent orders without status filter
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    expected_tools: [pg_search_orders]
+    expected_arguments: { limit: 10 }
+    expected_result_shape: { type: list, maxCount: 10, fields: [id, status, total_amount, created_at] }
+    success_criteria:
+      - toolCallSuccess == true
+      - 10 rekordów posortowanych malejąco po created_at
+    metrics: [latencyMs, successRate, errorRate]
+    iterations: 30
+    deterministic: true
+    notes: Migracja PG-004, semantyka bez zmian.
+
+  - id: SQL-007
+    name: Order statistics grouped by status
+    category: sql
+    variant: mcp
+    server: sql-controlled
+    expected_tools: [pg_get_order_statistics]
+    expected_capability: aggregation
+    expected_arguments: { groupBy: status }
+    expected_result_shape: { type: list, minCount: 1, fields: [group_value, order_count, total_amount_sum, total_amount_avg] }
+    success_criteria:
+      - toolCallSuccess == true
+      - agregaty count/sum/avg zgodne z wartościami wyliczonymi bezpośrednio z bazy
+    metrics: [latencyMs, successRate, errorRate, resultShapeCorrectness]
+    iterations: 30
+    deterministic: true
+    notes: >
+      Nowy scenariusz (narzędzie pg_get_order_statistics) — nie pochodzi
+      z migracji PG-00x, dlatego dostał nowy identyfikator.
